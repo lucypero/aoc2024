@@ -20,11 +20,19 @@ day1 :: proc() -> (total_dist: int, similarity_score: int, ok: bool) {
 	}
 
 	list1, list2: [dynamic]int
-	defer {
-		delete(inp)
-		delete(list1)
-		delete(list2)
-	}
+
+	// You could do this...:
+	// defer {
+	// 	delete(inp)
+	// 	delete(list1)
+	// 	delete(list2)
+	// }
+	// But i commented it out to not make the impression that you need to micro-manage allocations in odin
+	// because you don't. In this case you don't need to free anything because the program ends after this puzzle.
+	// In a real program, i'd either use the temp_allocator and free all of it after calling each aoc day proc;
+	// or, use arena temp memory 
+	// https://github.com/odin-lang/Odin/blob/master/core/mem/allocators.odin#L303
+	// begin_arena_temp_memory() ... end_arena_temp_memory()
 
 	for line in strings.split_lines_iterator(&inp_str) {
 		a := strconv.parse_int(line[:5]) or_return
